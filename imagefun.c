@@ -8,6 +8,7 @@ int main (int argc, char **argv)
 {
     SDL_Window  *window     = NULL;
     SDL_Surface *surface    = NULL;
+    SDL_Surface *image      = NULL;
 
     SDL_Rect    box;
 
@@ -35,6 +36,24 @@ int main (int argc, char **argv)
         else
         {
             surface     = SDL_GetWindowSurface(window);
+            
+            image       = SDL_LoadBMP("imagefun.bmp");
+            if (image   == NULL)
+            {
+                fprintf(stderr, "Unable to load image %s! ", "imagefun.bmp");
+                fprintf(stderr, "SDL Error: %s\n", SDL_GetError());
+                exit(1);
+            }
+
+            SDL_BlitSurface(image, NULL, surface, NULL);
+
+            SDL_UpdateWindowSurface(window);
+
+            SDL_Delay(2000);
+
+            SDL_DestroyWindow(window);
+
+            SDL_Quit();
         }
     }
 
