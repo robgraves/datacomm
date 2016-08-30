@@ -46,6 +46,10 @@ int main(int argc, char **argv)
     surface                 = SDL_GetWindowSurface(window);
     image                   = SDL_LoadBMP("small.bmp");
 
+    SDL_FillRect(surface,
+                NULL,
+                SDL_MapRGB(surface -> format, 0x00, 0x00, 0x00));
+
     SDL_BlitSurface(image, NULL, surface, &box);
     SDL_UpdateWindowSurface(window);
 
@@ -89,6 +93,10 @@ int main(int argc, char **argv)
                         quit = 1;
                         break;
                 }
+                SDL_FillRect(surface,
+                            NULL,
+                            SDL_MapRGB(surface -> format, 0x00, 0x00, 0x00));
+
                 SDL_BlitSurface(image, NULL, surface, &box);
                 SDL_UpdateWindowSurface(window);
             }
