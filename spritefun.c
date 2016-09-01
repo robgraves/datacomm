@@ -10,9 +10,29 @@ int main(int argc, char **argv)
 	SDL_Window  *window   = NULL;
 	SDL_Surface *surface  = NULL;
 	SDL_Surface *image    = NULL;
+	SDL_Surface *block    = NULL;
 
 	SDL_Rect     box;
 	SDL_Rect     sprite;
+	SDL_Rect     blockbox;
+	SDL_Rect     blockpos;
+
+	Uint32       rmask;
+	Uint32       gmask;
+	Uint32       bmask;
+	Uint32       amask;
+
+#if SDL_BYTEORDER == SDL_BIG_ENDIAN
+    rmask = 0xff000000;
+    gmask = 0x00ff0000;
+    bmask = 0x0000ff00;
+    amask = 0x000000ff;
+#else
+    rmask = 0x000000ff;
+    gmask = 0x0000ff00;
+    bmask = 0x00ff0000;
+    amask = 0xff000000;
+#endif
 
 	sprite.x              = 0;
 	sprite.y              = 0;
@@ -21,6 +41,8 @@ int main(int argc, char **argv)
 
 	int          x        = 0;
 	int          y        = 0;
+
+	int          frame    = 0;
 
 	int quit              = 0;
 	SDL_Event    e;
@@ -32,6 +54,11 @@ int main(int argc, char **argv)
 	box.y                 = (SCREEN_HEIGHT / 2) - 43;
 	box.w                 = 70;
 	box.h                 = 86;
+
+	blockbox.x            = 0;
+	blockbox.y            = 0;
+	blockbox.w            = 40;
+	blockbox.h            = 40;
 
 	if (SDL_Init(SDL_INIT_EVERYTHING) < 0)
 	{
@@ -55,11 +82,46 @@ int main(int argc, char **argv)
 	surface               = SDL_GetWindowSurface(window);
 	image                 = SDL_LoadBMP("mudkip.bmp");
 
+
+	block                 = SDL_CreateRGBSurface(0,
+												 blockbox.w,
+												 blockbox.h,
+												 24,
+												 rmask,
+												 gmask,
+												 bmask,
+												 amask);
+
 	SDL_FillRect(surface,
 				 NULL,
 				 SDL_MapRGB(surface -> format, 0x00, 0x00, 0x00));
 
+	SDL_FillRect(block,
+				 NULL,
+				 SDL_MapRGB(block   -> format, 0xFF, 0xFF, 0xFF));
+
 	SDL_BlitSurface(image, &sprite, surface, &box);
+	blockpos.x = 0;
+	blockpos.y = 0;
+	for (x = 0; x <= SCREEN_WIDTH; x+=blockpos.w)
+	{
+		blockpos.y  = 0;
+		SDL_BlitSurface(block, NULL,    surface, &blockpos);
+		blockpos.y  = SCREEN_HEIGHT - blockbox.h;
+		SDL_BlitSurface(block, NULL,    surface, &blockpos);
+		blockpos.x  = x;
+	}
+
+	blockpos.x = 0;
+	blockpos.y = 0;
+	for (y = 0; y <= SCREEN_HEIGHT; y+=blockpos.h)
+	{
+		blockpos.x  = 0;
+		SDL_BlitSurface(block, NULL,    surface, &blockpos);
+		blockpos.x  = SCREEN_WIDTH - blockbox.w;
+		SDL_BlitSurface(block, NULL,    surface, &blockpos);
+		blockpos.y  = y;
+	}
 	SDL_UpdateWindowSurface(window);
 
 	// stuff
@@ -80,21 +142,25 @@ int main(int argc, char **argv)
 					case SDLK_UP:
 						box.y     = box.y - 10;
 						sprite.y  = 0;
+						frame     = frame + 1;
 						break;
 
 					case SDLK_DOWN:
 						box.y     = box.y + 10;
 						sprite.y  = 128;
+						frame     = frame + 1;
 						break;
 
 					case SDLK_LEFT:
 						box.x     = box.x - 10;
 						sprite.y  = 192;
+						frame     = frame + 1;
 						break;
 
 					case SDLK_RIGHT:
 						box.x  = box.x + 10;
 						sprite.y  = 64;
+						frame     = frame + 1;
 						break;
 
 					case SDLK_SPACE:
@@ -110,7 +176,30 @@ int main(int argc, char **argv)
 							 NULL,
 							 SDL_MapRGB(surface -> format, 0x00, 0x00, 0x00));
 
+				frame             = frame % 3;
+				sprite.x          = frame * sprite.w;
 				SDL_BlitSurface(image, &sprite, surface, &box);
+				blockpos.x = 0;
+				blockpos.y = 0;
+				for (x = 0; x <= SCREEN_WIDTH; x+=blockpos.w)
+				{
+					blockpos.y  = 0;
+					SDL_BlitSurface(block, NULL,    surface, &blockpos);
+					blockpos.y  = SCREEN_HEIGHT - blockbox.h;
+					SDL_BlitSurface(block, NULL,    surface, &blockpos);
+					blockpos.x  = x;
+				}
+
+				blockpos.x = 0;
+				blockpos.y = 0;
+				for (y = 0; y <= SCREEN_HEIGHT; y+=blockpos.h)
+				{
+					blockpos.x  = 0;
+					SDL_BlitSurface(block, NULL,    surface, &blockpos);
+					blockpos.x  = SCREEN_WIDTH - blockbox.w;
+					SDL_BlitSurface(block, NULL,    surface, &blockpos);
+					blockpos.y  = y;
+				}
 				SDL_UpdateWindowSurface(window);
 			}
 		}
