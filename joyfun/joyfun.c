@@ -7,15 +7,18 @@ int SCREEN_HEIGHT;
 
 int main(int argc, char **argv)
 {
-	SDL_Window  *window   = NULL;
-	SDL_Surface *surface  = NULL;
-	SDL_Surface *image    = NULL;
-	SDL_Surface *block    = NULL;
+	SDL_Window   *window   = NULL;
+	SDL_Surface  *surface  = NULL;
+	SDL_Surface  *image    = NULL;
+	SDL_Surface  *block    = NULL;
+	SDL_Joystick **pad;
 
 	SDL_Rect     box;
 	SDL_Rect     sprite;
 	SDL_Rect     blockbox;
 	SDL_Rect     blockpos;
+
+	int JOYSTICK_DEAD_ZONE = 8000;
 
 	Uint32       rmask;
 	Uint32       gmask;
@@ -72,6 +75,26 @@ int main(int argc, char **argv)
 											 SCREEN_WIDTH,
 											 SCREEN_HEIGHT,
 											 SDL_WINDOW_SHOWN);
+
+	y = SDL_NumJoysticks();
+	if (y < 1)
+	{
+		fprintf(stderr, "Warning: No joysticks connected!\n");
+	}
+	else
+	{
+		fprintf(stdout, "%d joysticks detected\n", y);
+		pad = (SDL_Joystick **) malloc (sizeof(SDL_Joystick *) * y);
+		for (x = 0; x < y; x++)
+		{
+			*(pad+x) = SDL_JoystickOpen(x);
+			if (*(pad+x) == NULL)
+			{
+				fprintf(stderr, "Warning: Unable to open game controller %d!\n", x);
+				fprintf(stderr, "SDL Error: %s\n", SDL_GetError());
+			}
+		}
+	}
 
 	if (window           == NULL)
 	{
@@ -135,7 +158,44 @@ int main(int argc, char **argv)
 				quit      = 1;
 				break;
 			}
-			if (e.type   == SDL_KEYDOWN)
+			else if (e.type   == SDL_JOYAXISMOTION)
+			{
+				if (e.jaxis.which == 0) // motion on controller 0
+				{
+					if (e.jaxis.axis == 0) // on the X axis
+					{
+						if (e.jaxis.value < -JOYSTICK_DEAD_ZONE) // left
+						{
+							box.x = box.x - 10;
+							sprite.y = 192;
+							frame = frame + 1;
+						}
+						else if (e.jaxis.value > JOYSTICK_DEAD_ZONE) //right
+						{
+							box.x = box.x + 10;
+							sprite.y = 64;
+							frame = frame + 1;
+						}
+					}
+					else if (e.jaxis.axis == 1) // on the Y axis
+					{
+						if (e.jaxis.value < -JOYSTICK_DEAD_ZONE) // up
+						{
+							box.y = box.y - 10;
+							sprite.y = 0;
+							frame = frame + 1;
+						}
+						else if (e.jaxis.value > JOYSTICK_DEAD_ZONE) //down
+						{
+							box.y = box.y + 10;
+							sprite.y = 128;
+							frame = frame + 1;
+						}
+						
+					}
+				}
+			}
+			else if (e.type   == SDL_KEYDOWN)
 			{
 				switch (e.key.keysym.sym)
 				{
@@ -203,6 +263,12 @@ int main(int argc, char **argv)
 				SDL_UpdateWindowSurface(window);
 			}
 		}
+	}
+
+	for (x = 0; x < SDL_NumJoysticks(); x++)
+	{
+		SDL_JoystickClose(*(pad+x));
+		*(pad+x) = NULL;
 	}
 
 	// at the end
