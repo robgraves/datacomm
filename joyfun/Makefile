@@ -7,7 +7,7 @@ BIN = $(SRC:.c=)
 USERPWD = $(USERPATH)
 PROJPWD = $(PROJPATH)
 BINPATH = .
-all: $(SRC) $(BIN) 
+all: clean $(SRC) $(BIN) 
 
 debug: CFLAGS += -DDEBUG -g
 debug: DEBUG = debug
