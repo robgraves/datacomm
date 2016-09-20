@@ -1,0 +1,4 @@
+missilefun.c: In function ‘main’:
+missilefun.c:45:20: warning: unused variable ‘DEAD_ZONE’ [-Wunused-variable]
+     int            DEAD_ZONE  =  1;
+                    ^
