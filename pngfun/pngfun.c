@@ -467,7 +467,7 @@ int main(int argc, char **argv)
 					mtmp = mtmp -> next;
 			}
 
-            playerbox.x           = (((p_dir * 2) + frame) * playerbox.w);
+            playerbox.x           = (((p_dir * 3) + frame) * playerbox.w);
 
             SDL_BlitSurface(player, &playerbox, screen, &playerpos);
             blockpos.x            = 0;

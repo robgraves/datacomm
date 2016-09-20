@@ -1,5 +1,5 @@
 pngfun.c: In function ‘main’:
-pngfun.c:181:63: warning: passing argument 3 of ‘SDL_ConvertSurface’ makes integer from pointer without a cast
+pngfun.c:182:63: warning: passing argument 3 of ‘SDL_ConvertSurface’ makes integer from pointer without a cast
   player = SDL_ConvertSurface(loadedSurface, screen -> format, NULL);
                                                                ^
 In file included from /usr/include/SDL2/SDL_video.h:34:0,
@@ -9,7 +9,7 @@ In file included from /usr/include/SDL2/SDL_video.h:34:0,
 /usr/include/SDL2/SDL_surface.h:359:38: note: expected ‘Uint32’ but argument is of type ‘void *’
  extern DECLSPEC SDL_Surface *SDLCALL SDL_ConvertSurface
                                       ^
-pngfun.c:198:64: warning: passing argument 3 of ‘SDL_ConvertSurface’ makes integer from pointer without a cast
+pngfun.c:200:64: warning: passing argument 3 of ‘SDL_ConvertSurface’ makes integer from pointer without a cast
   missile = SDL_ConvertSurface(loadedSurface, screen -> format, NULL);
                                                                 ^
 In file included from /usr/include/SDL2/SDL_video.h:34:0,
@@ -19,7 +19,7 @@ In file included from /usr/include/SDL2/SDL_video.h:34:0,
 /usr/include/SDL2/SDL_surface.h:359:38: note: expected ‘Uint32’ but argument is of type ‘void *’
  extern DECLSPEC SDL_Surface *SDLCALL SDL_ConvertSurface
                                       ^
-pngfun.c:215:60: warning: passing argument 3 of ‘SDL_ConvertSurface’ makes integer from pointer without a cast
+pngfun.c:218:60: warning: passing argument 3 of ‘SDL_ConvertSurface’ makes integer from pointer without a cast
   npc = SDL_ConvertSurface(loadedSurface, screen -> format, NULL);
                                                             ^
 In file included from /usr/include/SDL2/SDL_video.h:34:0,
