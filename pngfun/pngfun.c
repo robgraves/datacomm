@@ -178,6 +178,7 @@ int main(int argc, char **argv)
 		exit(1);
 	}
 
+	SDL_SetColorKey(loadedSurface, SDL_TRUE, SDL_MapRGB(loadedSurface -> format, 0, 0, 0));
 	player = SDL_ConvertSurface(loadedSurface, screen -> format, NULL);
 	if (player == NULL)
 	{
@@ -195,6 +196,7 @@ int main(int argc, char **argv)
 		exit(1);
 	}
 
+	SDL_SetColorKey(loadedSurface, SDL_TRUE, SDL_MapRGB(loadedSurface -> format, 0, 0, 0));
 	missile = SDL_ConvertSurface(loadedSurface, screen -> format, NULL);
 	if (missile == NULL)
 	{
@@ -212,6 +214,7 @@ int main(int argc, char **argv)
 		exit(1);
 	}
 
+	SDL_SetColorKey(loadedSurface, SDL_TRUE, SDL_MapRGB(loadedSurface -> format, 0, 0, 0));
 	npc = SDL_ConvertSurface(loadedSurface, screen -> format, NULL);
 	if (npc == NULL)
 	{
