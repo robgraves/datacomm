@@ -32,7 +32,9 @@ int main(int argc, char **argv)
     SDL_Surface   *screen     = NULL;
     SDL_Surface   *player     = NULL;
 	SDL_Surface   *missile    = NULL;
+	SDL_Surface   *npc        = NULL;
     SDL_Surface   *block      = NULL;
+	SDL_Surface *loadedSurface  = NULL;     // surface to hold raw data
     SDL_Joystick **pad        = NULL;
     SDL_Event      e;
 
@@ -156,8 +158,68 @@ int main(int argc, char **argv)
     }
 
     screen                    = SDL_GetWindowSurface(window);
-    player                    = SDL_LoadBMP("mudkip.bmp");
-	missile                   = SDL_LoadBMP("missile.bmp");
+
+	// initialize PNG loading
+	int imgFlags = IMG_INIT_PNG;
+	if (!(IMG_Init(imgFlags) & imgFlags))
+	{
+		fprintf(stderr, "SDL_image could not initialize!\n");
+		fprintf(stderr, "SDL_image error: %s\n", IMG_GetError());
+		exit(1);
+	}
+
+    //player                    = SDL_LoadBMP("mudkip.bmp");
+
+	loadedSurface  = NULL;     // surface to hold raw data
+	loadedSurface = IMG_Load("mudkip.png"); // load the file
+	if (loadedSurface == NULL)
+	{
+		fprintf(stderr, "Teh errorZ! I die.\n");
+		exit(1);
+	}
+
+	player = SDL_ConvertSurface(loadedSurface, screen -> format, NULL);
+	if (player == NULL)
+	{
+		fprintf(stderr, "Moar errorz0rz. I die twice.\n");
+		exit(1);
+	}
+	SDL_FreeSurface(loadedSurface);
+
+	//missile                   = SDL_LoadBMP("missile.bmp");
+	loadedSurface  = NULL;     // surface to hold raw data
+	loadedSurface = IMG_Load("missile.png"); // load the file
+	if (loadedSurface == NULL)
+	{
+		fprintf(stderr, "Teh errorZ! I die.\n");
+		exit(1);
+	}
+
+	missile = SDL_ConvertSurface(loadedSurface, screen -> format, NULL);
+	if (missile == NULL)
+	{
+		fprintf(stderr, "Moar errorz0rz. I die twice.\n");
+		exit(1);
+	}
+	SDL_FreeSurface(loadedSurface);
+
+
+	loadedSurface  = NULL;     // surface to hold raw data
+	loadedSurface = IMG_Load("npc.png"); // load the file
+	if (loadedSurface == NULL)
+	{
+		fprintf(stderr, "Teh errorZ! I die.\n");
+		exit(1);
+	}
+
+	npc = SDL_ConvertSurface(loadedSurface, screen -> format, NULL);
+	if (npc == NULL)
+	{
+		fprintf(stderr, "Moar errorz0rz. I die twice.\n");
+		exit(1);
+	}
+	SDL_FreeSurface(loadedSurface);
+
 
     block                     = SDL_CreateRGBSurface(0,
                                                      blockbox.w,

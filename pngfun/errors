@@ -1,0 +1,4 @@
+pngfun.c: In function ‘main’:
+pngfun.c:46:20: warning: unused variable ‘DEAD_ZONE’ [-Wunused-variable]
+     int            DEAD_ZONE  =  1;
+                    ^
