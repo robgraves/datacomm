@@ -26,7 +26,7 @@ int SCREEN_HEIGHT;
 SDL_Renderer *createrenderer(SDL_Window *);
 void setuprenderer(SDL_Renderer *, SDL_Rect);
 SDL_Texture *surfacetexture(SDL_Renderer *, SDL_Surface *);
-void createtextures(SDL_Texture *, SDL_Renderer *, TTF_Font *, SDL_Rect *, SDL_Color);
+SDL_Texture *createtextures(SDL_Texture *, SDL_Renderer *, TTF_Font *, SDL_Rect *, SDL_Color);
 void render(SDL_Renderer *, SDL_Texture *, SDL_Rect);
 
 int main(int argc, char **argv)
@@ -179,6 +179,12 @@ int main(int argc, char **argv)
 		exit(1);
 	}
 
+	SDL_Renderer *renderer;
+	renderer = createrenderer(window);
+
+	SDL_Rect fontpos;
+	setuprenderer(renderer, fontpos);
+
 	if (TTF_Init() == -1)
 	{
 		fprintf(stderr, "Bad font, no text\n");
@@ -192,8 +198,9 @@ int main(int argc, char **argv)
 		exit(1);
 	}
 
-	SDL_Renderer *renderer = NULL;  // we need a renderer
+	SDL_Texture *fonture;
 	SDL_Color fontcolor = { 0xFF, 0xFF, 0xFF };
+	fonture = createtextures(fonture, renderer, font, &fontpos, fontcolor);
 
     //player                    = SDL_LoadBMP("mudkip.bmp");
 
@@ -525,10 +532,7 @@ int main(int argc, char **argv)
             }
 
 			
-			SDL_SetRenderDrawColor(renderer, 0x00, 0x00, 0x00, 0x00);
-			SDL_RenderClear(renderer);
-
-			SDL_RenderPresent(renderer);
+			render(renderer, fonture, fontpos);
 
             SDL_UpdateWindowSurface(window);
 			frame                 = 0;
@@ -578,7 +582,7 @@ SDL_Texture *surfacetexture(SDL_Renderer *renderer, SDL_Surface *stmp)
 	return(text);
 }
 
-void createtextures(SDL_Texture *solidTexture, SDL_Renderer *renderer, TTF_Font *font, SDL_Rect *box, SDL_Color color)
+SDL_Texture *createtextures(SDL_Texture *solidTexture, SDL_Renderer *renderer, TTF_Font *font, SDL_Rect *box, SDL_Color color)
 {
 	SDL_Surface *solid = TTF_RenderText_Solid(font, "solid", color);
 	solidTexture = surfacetexture(renderer, solid);
@@ -586,6 +590,8 @@ void createtextures(SDL_Texture *solidTexture, SDL_Renderer *renderer, TTF_Font 
 	SDL_QueryTexture(solidTexture, NULL, NULL, box -> w, box -> h);
 	box -> x = 0;
 	box -> y = 0;
+
+	return(solidTexture);
 }
 
 void render(SDL_Renderer *renderer, SDL_Texture *solidTexture, SDL_Rect box)
