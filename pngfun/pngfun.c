@@ -25,7 +25,7 @@ int SCREEN_HEIGHT;
 
 SDL_Renderer *createrenderer(SDL_Window *);
 void setuprenderer(SDL_Renderer *, SDL_Rect);
-SDL_Texture *surfacetotexture(SDL_Renderer *, SDL_Surface *);
+SDL_Texture *surfacetexture(SDL_Renderer *, SDL_Surface *);
 void createtextures(SDL_Texture *, SDL_Renderer *, TTF_Font *, SDL_Rect *, SDL_Color);
 void render(SDL_Renderer *, SDL_Texture *, SDL_Rect);
 
@@ -206,7 +206,7 @@ int main(int argc, char **argv)
 	}
 
 	SDL_SetColorKey(loadedSurface, SDL_TRUE, SDL_MapRGB(loadedSurface -> format, 0, 0, 0));
-	player = SDL_ConvertSurface(loadedSurface, screen -> format, NULL);
+	player = SDL_ConvertSurface(loadedSurface, screen -> format, 0);
 	if (player == NULL)
 	{
 		fprintf(stderr, "Moar errorz0rz. I die twice.\n");
@@ -224,7 +224,7 @@ int main(int argc, char **argv)
 	}
 
 	SDL_SetColorKey(loadedSurface, SDL_TRUE, SDL_MapRGB(loadedSurface -> format, 0, 0, 0));
-	missile = SDL_ConvertSurface(loadedSurface, screen -> format, NULL);
+	missile = SDL_ConvertSurface(loadedSurface, screen -> format, 0);
 	if (missile == NULL)
 	{
 		fprintf(stderr, "Moar errorz0rz. I die twice.\n");
@@ -242,7 +242,7 @@ int main(int argc, char **argv)
 	}
 
 	SDL_SetColorKey(loadedSurface, SDL_TRUE, SDL_MapRGB(loadedSurface -> format, 0, 0, 0));
-	npc = SDL_ConvertSurface(loadedSurface, screen -> format, NULL);
+	npc = SDL_ConvertSurface(loadedSurface, screen -> format, 0);
 	if (npc == NULL)
 	{
 		fprintf(stderr, "Moar errorz0rz. I die twice.\n");
@@ -565,7 +565,7 @@ void setuprenderer(SDL_Renderer *renderer, SDL_Rect box)
 	SDL_RenderSetLogicalSize(renderer, box.w, box.h);
 
 	// Set color of text to be white
-	SDL_SetRenderDrawingColor(renderer, 255, 255, 255, 127);
+	SDL_SetRenderDrawColor(renderer, 255, 255, 255, 127);
 }
 
 SDL_Texture *surfacetexture(SDL_Renderer *renderer, SDL_Surface *stmp)
