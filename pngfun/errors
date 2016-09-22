@@ -1,4 +1,0 @@
-pngfun.c:1:22: fatal error: SDL2/SDL.h: No such file or directory
- #include <SDL2/SDL.h>
-                      ^
-compilation terminated.

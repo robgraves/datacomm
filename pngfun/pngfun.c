@@ -226,7 +226,7 @@ int main(int argc, char **argv)
 	loadedSurface = IMG_Load("missile.png"); // load the file
 	if (loadedSurface == NULL)
 	{
-		fprintf(stderr, "Teh errorZ! I die.\n");
+		fprintf(stderr, "Teh errorZ! I die (maybe).\n");
 		exit(1);
 	}
 
@@ -234,7 +234,7 @@ int main(int argc, char **argv)
 	missile = SDL_ConvertSurface(loadedSurface, screen -> format, 0);
 	if (missile == NULL)
 	{
-		fprintf(stderr, "Moar errorz0rz. I die twice.\n");
+		fprintf(stderr, "Moar errorz0rz. I die thrice.\n");
 		exit(1);
 	}
 	SDL_FreeSurface(loadedSurface);
@@ -244,7 +244,7 @@ int main(int argc, char **argv)
 	loadedSurface = IMG_Load("npc.png"); // load the file
 	if (loadedSurface == NULL)
 	{
-		fprintf(stderr, "Teh errorZ! I die.\n");
+		fprintf(stderr, "Teh errorZ! I die agAIN.\n");
 		exit(1);
 	}
 
@@ -252,7 +252,7 @@ int main(int argc, char **argv)
 	npc = SDL_ConvertSurface(loadedSurface, screen -> format, 0);
 	if (npc == NULL)
 	{
-		fprintf(stderr, "Moar errorz0rz. I die twice.\n");
+		fprintf(stderr, "Moar errorz0rz. I die a millionnne dies.\n");
 		exit(1);
 	}
 	SDL_FreeSurface(loadedSurface);
