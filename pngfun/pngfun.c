@@ -583,7 +583,7 @@ void createtextures(SDL_Texture *solidTexture, SDL_Renderer *renderer, TTF_Font 
 	SDL_Surface *solid = TTF_RenderText_Solid(font, "solid", color);
 	solidTexture = surfacetexture(renderer, solid);
 
-	SDL_QueryTexture(solidTexture, NULL, NULL, box.w, box.h);
+	SDL_QueryTexture(solidTexture, NULL, NULL, box -> w, box -> h);
 	box -> x = 0;
 	box -> y = 0;
 }
