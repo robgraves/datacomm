@@ -204,14 +204,14 @@ int main(int argc, char **argv)
 
     //player                    = SDL_LoadBMP("mudkip.bmp");
 
-	loadedSurface  = NULL;     // surface to hold raw data
-	loadedSurface = IMG_Load("mudkip.png"); // load the file
-	if (loadedSurface == NULL)
+	//loadedSurface = IMG_Load("mudkip.png"); // load the file
+	player = IMG_Load("mudkip.png"); // load the file
+	if (player == NULL)
 	{
 		fprintf(stderr, "Teh errorZ! I die.\n");
 		exit(1);
 	}
-
+/*
 	SDL_SetColorKey(loadedSurface, SDL_TRUE, SDL_MapRGB(loadedSurface -> format, 0, 0, 0));
 	player = SDL_ConvertSurface(loadedSurface, screen -> format, 0);
 	if (player == NULL)
@@ -220,17 +220,16 @@ int main(int argc, char **argv)
 		exit(1);
 	}
 	SDL_FreeSurface(loadedSurface);
-
+*/
 	//missile                   = SDL_LoadBMP("missile.bmp");
-	loadedSurface  = NULL;     // surface to hold raw data
-	loadedSurface = IMG_Load("missile.png"); // load the file
-	if (loadedSurface == NULL)
+	missile = IMG_Load("missile.png"); // load the file
+	if (missile == NULL)
 	{
 		fprintf(stderr, "Teh errorZ! I die (maybe).\n");
 		exit(1);
 	}
 
-	SDL_SetColorKey(loadedSurface, SDL_TRUE, SDL_MapRGB(loadedSurface -> format, 0, 0, 0));
+/*	SDL_SetColorKey(loadedSurface, SDL_TRUE, SDL_MapRGB(loadedSurface -> format, 0, 0, 0));
 	missile = SDL_ConvertSurface(loadedSurface, screen -> format, 0);
 	if (missile == NULL)
 	{
@@ -238,16 +237,15 @@ int main(int argc, char **argv)
 		exit(1);
 	}
 	SDL_FreeSurface(loadedSurface);
+*/
 
-
-	loadedSurface  = NULL;     // surface to hold raw data
-	loadedSurface = IMG_Load("npc.png"); // load the file
-	if (loadedSurface == NULL)
+	npc = IMG_Load("npc.png"); // load the file
+	if (npc == NULL)
 	{
 		fprintf(stderr, "Teh errorZ! I die agAIN.\n");
 		exit(1);
 	}
-
+/*
 	SDL_SetColorKey(loadedSurface, SDL_TRUE, SDL_MapRGB(loadedSurface -> format, 0, 0, 0));
 	npc = SDL_ConvertSurface(loadedSurface, screen -> format, 0);
 	if (npc == NULL)
@@ -256,6 +254,7 @@ int main(int argc, char **argv)
 		exit(1);
 	}
 	SDL_FreeSurface(loadedSurface);
+	*/
 
 
     block                     = SDL_CreateRGBSurface(0,
