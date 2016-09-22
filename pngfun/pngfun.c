@@ -23,11 +23,11 @@ typedef struct missile Missile;
 int SCREEN_WIDTH;
 int SCREEN_HEIGHT;
 
-int  createrenderer();
-void setuprenderer();
-SDL_Texture *surfacetotexture(SDL_Surface *);
-void createtextures();
-void render();
+SDL_Renderer *createrenderer(SDL_Window *);
+void setuprenderer(SDL_Renderer *, SDL_Rect);
+SDL_Texture *surfacetotexture(SDL_Renderer *, SDL_Surface *);
+void createtextures(SDL_Texture *, SDL_Renderer *, TTF_Font *, SDL_Rect *, SDL_Color);
+void render(SDL_Renderer *, SDL_Texture *, SDL_Rect);
 
 int main(int argc, char **argv)
 {
@@ -576,4 +576,26 @@ SDL_Texture *surfacetexture(SDL_Renderer *renderer, SDL_Surface *stmp)
 	SDL_FreeSurface(stmp);
 
 	return(text);
+}
+
+void createtextures(SDL_Texture *solidTexture, SDL_Renderer *renderer, TTF_Font *font, SDL_Rect *box, SDL_Color color)
+{
+	SDL_Surface *solid = TTF_RenderText_Solid(font, "solid", color);
+	solidTexture = surfacetexture(renderer, solid);
+
+	SDL_QueryTexture(solidTexture, NULL, NULL, box.w, box.h);
+	box -> x = 0;
+	box -> y = 0;
+}
+
+void render(SDL_Renderer *renderer, SDL_Texture *solidTexture, SDL_Rect box)
+{
+	// clear our texture drawing render space
+	SDL_RenderClear(renderer);
+
+	// render texture object onto texture drawing render space
+	SDL_RenderCopy(renderer, solidTexture, NULL, &box);
+
+	// render (finalize) things
+	SDL_RenderPresent(renderer);
 }
