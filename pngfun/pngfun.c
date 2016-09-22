@@ -1,5 +1,6 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
+#include <SDL2/SDL_ttf.h>
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -21,6 +22,12 @@ typedef struct missile Missile;
 
 int SCREEN_WIDTH;
 int SCREEN_HEIGHT;
+
+int  createrenderer();
+void setuprenderer();
+SDL_Texture *surfacetotexture(SDL_Surface *);
+void createtextures();
+void render();
 
 int main(int argc, char **argv)
 {
@@ -45,14 +52,18 @@ int main(int argc, char **argv)
     SDL_Rect       blockbox;   // block   sprite coords
     SDL_Rect       blockpos;   // block   screen position
 
+	TTF_Font      *font       = NULL;
+
     int            DEAD_ZONE  =  1;
     int            x          =  0;
+	int            counter    =  0;
 	int            rfs        =  0;
     int            num_pads   =  0;
     int            frame      =  0;
     int            quit       =  0;
     int            p_go       =  5;
 	int            p_dir      = M_DN; // player  direction
+	char           textstring[20];
 
     Uint32         rmask;
     Uint32         gmask;
@@ -167,6 +178,22 @@ int main(int argc, char **argv)
 		fprintf(stderr, "SDL_image error: %s\n", IMG_GetError());
 		exit(1);
 	}
+
+	if (TTF_Init() == -1)
+	{
+		fprintf(stderr, "Bad font, no text\n");
+		exit(1);
+	}
+
+	font = TTF_OpenFont("font.ttf", 14);
+	if (font == NULL)
+	{
+		fprintf(stderr, "No font, image is wordless\n");
+		exit(1);
+	}
+
+	SDL_Renderer *renderer = NULL;  // we need a renderer
+	SDL_Color fontcolor = { 0xFF, 0xFF, 0xFF };
 
     //player                    = SDL_LoadBMP("mudkip.bmp");
 
@@ -389,6 +416,11 @@ int main(int argc, char **argv)
 						mtmp -> box.x = 16 * mtmp -> m_dir;
 						rfs = rand() % 9 + 1;
 						mtmp -> m_go  = rfs;
+						counter++;
+						sprintf(textstring, "%d", counter);
+						SDL_Surface *ts = TTF_RenderText_Solid(font, textstring, fontcolor);
+						SDL_Texture *mTexture;
+						mTexture = SDL_CreateTextureFromSurface(renderer, ts);
 						break;
 						
                     case SDLK_ESCAPE:
@@ -491,6 +523,13 @@ int main(int argc, char **argv)
                 SDL_BlitSurface(block, NULL, screen, &blockpos);
                 blockpos.y        = x;
             }
+
+			
+			SDL_SetRenderDrawColor(renderer, 0x00, 0x00, 0x00, 0x00);
+			SDL_RenderClear(renderer);
+
+			SDL_RenderPresent(renderer);
+
             SDL_UpdateWindowSurface(window);
 			frame                 = 0;
         }
@@ -506,4 +545,35 @@ int main(int argc, char **argv)
     SDL_Quit();
 
     return(0);
+}
+
+SDL_Renderer *createrenderer(SDL_Window *window)
+{
+	SDL_Renderer *renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+	if (renderer == NULL)
+	{
+		fprintf(stderr, "ERRORz0rz: renderer unrendereredlessly\n");
+		exit(1);
+	}
+
+	return(renderer);
+}
+
+void setuprenderer(SDL_Renderer *renderer, SDL_Rect box)
+{
+	// Set renderer to same size as our SDL window
+	SDL_RenderSetLogicalSize(renderer, box.w, box.h);
+
+	// Set color of text to be white
+	SDL_SetRenderDrawingColor(renderer, 255, 255, 255, 127);
+}
+
+SDL_Texture *surfacetexture(SDL_Renderer *renderer, SDL_Surface *stmp)
+{
+	SDL_Texture *text;
+
+	text = SDL_CreateTextureFromSurface(renderer, stmp);
+	SDL_FreeSurface(stmp);
+
+	return(text);
 }

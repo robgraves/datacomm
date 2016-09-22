@@ -1,4 +1,4 @@
-LIBS = -lm -lSDL2 -lSDL2_image
+LIBS = -lm -lSDL2 -lSDL2_image -lSDL2_ttf
 CFLAGS = -Wall $(LIBS)
 INC = 
 CC = gcc
