@@ -1,0 +1,8 @@
+joyfun.c: In function ‘main’:
+joyfun.c:22:20: warning: unused variable ‘DEAD_ZONE’ [-Wunused-variable]
+     int            DEAD_ZONE  = 1;
+                    ^
+tester.c: In function ‘main’:
+tester.c:10:20: warning: unused variable ‘JOYSTICK_DEAD_ZONE’ [-Wunused-variable]
+     int            JOYSTICK_DEAD_ZONE  = 1;
+                    ^

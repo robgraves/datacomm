@@ -1,0 +1,31 @@
+pngfun.c: In function ‘main’:
+pngfun.c:428:20: warning: variable ‘mTexture’ set but not used [-Wunused-but-set-variable]
+       SDL_Texture *mTexture;
+                    ^
+pngfun.c:57:20: warning: unused variable ‘DEAD_ZONE’ [-Wunused-variable]
+     int            DEAD_ZONE  =  1;
+                    ^
+pngfun.c:44:15: warning: unused variable ‘loadedSurface’ [-Wunused-variable]
+  SDL_Surface *loadedSurface  = NULL;     // surface to hold raw data
+               ^
+pngfun.c: In function ‘createtextures’:
+pngfun.c:589:45: warning: passing argument 4 of ‘SDL_QueryTexture’ makes pointer from integer without a cast
+  SDL_QueryTexture(solidTexture, NULL, NULL, box -> w, box -> h);
+                                             ^
+In file included from /usr/include/SDL2/SDL.h:52:0,
+                 from pngfun.c:1:
+/usr/include/SDL2/SDL_render.h:273:29: note: expected ‘int *’ but argument is of type ‘int’
+ extern DECLSPEC int SDLCALL SDL_QueryTexture(SDL_Texture * texture,
+                             ^
+pngfun.c:589:55: warning: passing argument 5 of ‘SDL_QueryTexture’ makes pointer from integer without a cast
+  SDL_QueryTexture(solidTexture, NULL, NULL, box -> w, box -> h);
+                                                       ^
+In file included from /usr/include/SDL2/SDL.h:52:0,
+                 from pngfun.c:1:
+/usr/include/SDL2/SDL_render.h:273:29: note: expected ‘int *’ but argument is of type ‘int’
+ extern DECLSPEC int SDLCALL SDL_QueryTexture(SDL_Texture * texture,
+                             ^
+pngfun.c: In function ‘main’:
+pngfun.c:203:10: warning: ‘fonture’ may be used uninitialized in this function [-Wmaybe-uninitialized]
+  fonture = createtextures(fonture, renderer, font, &fontpos, fontcolor);
+          ^
