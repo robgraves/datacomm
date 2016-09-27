@@ -1,4 +1,5 @@
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_image.h>
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -32,6 +33,8 @@ int main(int argc, char **argv)
     SDL_Surface   *player     = NULL;
 	SDL_Surface   *missile    = NULL;
     SDL_Surface   *block      = NULL;
+	SDL_Surface   *npc        = NULL;
+
     SDL_Joystick **pad        = NULL;
     SDL_Event      e;
 
@@ -41,6 +44,8 @@ int main(int argc, char **argv)
 	SDL_Rect       missilepos;
     SDL_Rect       blockbox;   // block   sprite coords
     SDL_Rect       blockpos;   // block   screen position
+	SDL_Rect       npcbox;
+	SDL_Rect       npcpos;
 
     int            DEAD_ZONE  =  1;
     int            x          =  0;
@@ -157,8 +162,15 @@ int main(int argc, char **argv)
     }
 
     screen                    = SDL_GetWindowSurface(window);
-    player                    = SDL_LoadBMP("mudkip.bmp");
-	missile                   = SDL_LoadBMP("missile.bmp");
+
+	player                    = IMG_Load("player.png");
+	missile                   = IMG_Load("missile.png");
+	npc                       = IMG_Load("npc.png");
+	if ((player == NULL) || (missile == NULL) || (npc == NULL))
+	{
+		fprintf(stderr, "IMG_Load is bunk; insert 25 cents\n");
+		exit(1);
+	}
 
     block                     = SDL_CreateRGBSurface(0,
                                                      blockbox.w,
@@ -178,6 +190,17 @@ int main(int argc, char **argv)
                  SDL_MapRGB(block   -> format, 0xFF, 0xFF, 0xFF));
 
     SDL_BlitSurface(player, &playerbox, screen, &playerpos);
+	
+	// where NPC is on the screen
+	npcpos.x                  = 80;
+	npcpos.y                  = SCREEN_HEIGHT - 100;
+
+	// NPC sprite from sprite sheet
+	npcbox.x                  = 0;
+	npcbox.y                  = 0;
+	npcbox.w                  = 17;
+	npcbox.h                  = 17;
+
     blockpos.x                = 0;
     blockpos.y                = 0;
     for (x = 0; x <= SCREEN_WIDTH; x+=blockpos.w)
@@ -463,6 +486,9 @@ int main(int argc, char **argv)
                 SDL_BlitSurface(block, NULL, screen, &blockpos);
                 blockpos.y        = x;
             }
+
+			SDL_BlitSurface(npc, &npcbox, screen, &npcpos);
+
             SDL_UpdateWindowSurface(window);
 			frame                 = 0;
         }
