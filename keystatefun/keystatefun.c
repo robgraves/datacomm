@@ -51,6 +51,8 @@ int main(int argc, char **argv)
     int            p_go       =  5;
 	int            p_dir      = M_DN; // player  direction
 
+	Uint8         *keystate   = NULL;
+
     Uint32         rmask;
     Uint32         gmask;
     Uint32         bmask;
@@ -204,6 +206,67 @@ int main(int argc, char **argv)
         while (quit          == 0)
         {
             SDL_PollEvent(&e);
+			keystate          = SDL_GetKeyboardState(NULL);
+
+			if (keystate[SDL_SCANCODE_UP])
+			{
+				playerpos.y     = playerpos.y - p_go;
+				frame     = 1;
+				p_dir     = M_UP;
+			}
+
+			if (keystate[SDL_SCANCODE_DOWN])
+			{
+				playerpos.y     = playerpos.y + p_go;
+				frame     = 1;
+				p_dir     = M_DN;
+			}
+
+			if (keystate[SDL_SCANCODE_LEFT])
+			{
+				playerpos.x     = playerpos.x - p_go;
+				frame     = 1;
+				p_dir     = M_LF;
+			}
+
+			if (keystate[SDL_SCANCODE_RIGHT])
+			{
+				playerpos.x  = playerpos.x + p_go;
+				frame     = 1;
+				p_dir     = M_RT;
+			}
+
+			if (keystate[SDL_SCANCODE_LCTRL])
+			{
+				if (mlist == NULL)
+				{
+					mlist  = (Missile *) malloc (sizeof(Missile));
+					mlist -> surface = missile;
+					mlist -> box  = missilebox;
+					mlist -> pos  = missilepos;
+					mlist -> next = NULL;
+					mtmp          = mlist;
+				}
+				else
+				{
+					mtmp = mlist;
+					while (mtmp -> next != NULL)
+						mtmp = mtmp -> next;
+
+					mtmp -> next = (Missile *) malloc (sizeof(Missile));
+					mtmp         = mtmp -> next;
+					mtmp -> surface = missile;
+					mtmp -> box  = missilebox;
+					mtmp -> pos  = missilepos;
+					mtmp -> next = NULL;
+				}
+				mtmp -> pos.x = playerpos.x+(playerbox.w/2)-(mtmp -> box.w/2);
+				mtmp -> pos.y = playerpos.y+(playerbox.h/2)-(mtmp -> box.h/2);
+				mtmp -> m_dir = p_dir;
+				mtmp -> box.x = 16 * mtmp -> m_dir;
+				rfs = rand() % 9 + 1;
+				mtmp -> m_go  = rfs;
+			}
 
             // button integration
             if (e.type       == SDL_JOYBUTTONDOWN)
@@ -263,30 +326,6 @@ int main(int argc, char **argv)
             {
                 switch (e.key.keysym.sym)
                 {
-                    case SDLK_UP:
-                        playerpos.y     = playerpos.y - p_go;
-                        frame     = 1;
-						p_dir     = M_UP;
-                        break;
-
-                    case SDLK_DOWN:
-                        playerpos.y     = playerpos.y + p_go;
-                        frame     = 1;
-						p_dir     = M_DN;
-                        break;
-
-                    case SDLK_LEFT:
-                        playerpos.x     = playerpos.x - p_go;
-                        frame     = 1;
-						p_dir     = M_LF;
-                        break;
-
-                    case SDLK_RIGHT:
-                        playerpos.x  = playerpos.x + p_go;
-                        frame     = 1;
-						p_dir     = M_RT;
-                        break;
-
                     case SDLK_SPACE:
                         playerpos.x     = (SCREEN_WIDTH  / 2) - 35;
                         playerpos.y     = (SCREEN_HEIGHT / 2) - 43;

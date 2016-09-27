@@ -1,0 +1,7 @@
+keystatefun.c: In function ‘main’:
+keystatefun.c:209:22: warning: assignment discards ‘const’ qualifier from pointer target type
+    keystate          = SDL_GetKeyboardState(NULL);
+                      ^
+keystatefun.c:45:20: warning: unused variable ‘DEAD_ZONE’ [-Wunused-variable]
+     int            DEAD_ZONE  =  1;
+                    ^
