@@ -25,3 +25,7 @@ debug: $(OBJ)
 
 clean:
 	rm -f $(OBJ)
+
+prepare:
+	hg pull
+	hg update
