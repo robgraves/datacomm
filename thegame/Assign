@@ -1,0 +1,56 @@
+#!/bin/bash
+
+Contents=$(cat /home/mzarnoch/src/daco/WhoWorks.text)
+
+Help=$(echo "                                 ~Help Menu:                                    ~____________________________________________________________________________~|./Assign [Category]     | To add yourself to add yourself to that category |~|./Assign Add [Category] | To add that Category to the list                 |~|./Assign who            | To view who is working on the project            |~|./Assign help           | To view this menu                                |~|./Assign                | To view who is working on the project            |~ \=========================================================================/" | tr '~' '\n')
+
+if [ $# -lt 1 ]
+then
+	echo "$Contents" | tr '-' '\n' | tr ',' ' '
+
+elif [ $# -eq 1 ]
+then
+	#take their user name and add it to category
+	if [ "$1" == "who" ]
+	then
+		echo "$Contents" | tr '-' '\n' | tr ',' ' '
+	elif [ "$1" == "help" ]
+	then
+		echo "$Help"
+		echo "Commit projects to this repository;"
+		echo "www/hg/project/thegame-fall2016"
+	else
+		search=$(echo "$Contents" | grep -c "$1")
+		if [ $search -eq 1 ]
+		then
+			search=$(echo "$Contents" | grep -c ",$USER")
+			if [ $search -gt 0 ] # Person is in another class, so I must remove them from it
+			then
+				Addon=$(echo "$Contents" | grep "$USER"  | tr ',' '\n' | grep -v "$USER" | tr '\n' ',') # Finds the user and make an adjested copy of the class person was in
+				Contents=$(echo "$Contents" | grep -v $USER) # Removes person from original copy
+				Contents=$(echo "$Contents~$Addon" | tr '~' '\n' | tr -d ',,')
+			fi
+			Addon=$(echo "$Contents" | grep "$1")
+			Addon=$(echo "$Addon,$USER")
+			Contents=$(echo "$Contents" | grep -v "$1")
+			Contents=$(echo "$Contents~$Addon" | tr '~' '\n')
+			echo "$Contents" > /home/mzarnoch/src/daco/WhoWorks.text # Updates the file with the new list
+		else
+			echo "Error: Class '$1' not in list! Suggest adding it"
+			echo "Try who to view project page"
+		fi
+	fi
+elif [ $# -eq 2 ]
+then
+	if [ $1 == "add" ] # Have to check and see if the person is specifying the add command
+	then
+		echo "-$2:" >> /home/mzarnoch/src/daco/WhoWorks.text
+		echo "$2 added to project page!"
+	else
+		echo "Error: '$1' not recognized as a command. Try help"
+	fi
+
+else # Person put too many arguements in
+	echo "Error: Too many arguments!"
+	echo "$Help"
+fi
