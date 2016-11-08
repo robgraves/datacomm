@@ -8,6 +8,7 @@
 #include <SDL2/SDL_image.h>
 
 // TheGame Includes
+#include "inc/render.h"
 #include "inc/player.h"
 
 // Global Variables
@@ -16,11 +17,22 @@ int SCREEN_HEIGHT;
 
 SDL_Window *window;
 SDL_Surface *surface;
+Entity *player;
+
+SDL_Event e;
+Uint8 *keystate;
+
+Entity *initial;
+Entity *closing;
 
 // Function prototypes
 void init();
 void loop();
+void movement();
 void paint();
+
+void addEntity(Entity *);
+void removeEntity(Entity *);
 
 int main() {
 	init();
@@ -52,6 +64,20 @@ void init() {
 		}
 		else {
 			surface = SDL_GetWindowSurface(window);
+			Entity *bg = new Entity();;
+			bg -> setSurface(surface);
+			bg -> setBox(0,0,SCREEN_WIDTH,SCREEN_HEIGHT);
+			bg -> setLayer(0);
+			initial = bg;
+			closing = bg;
+
+			player = new Entity();
+			player -> setSurface(IMG_Load("player.png"));
+			player -> setPos(SCREEN_WIDTH/2, SCREEN_HEIGHT/2, 36, 58);
+			player -> setBox(0,0,36,58);
+			addEntity(player);
+
+			keystate = NULL;
 		}
 	}
 }
@@ -59,15 +85,66 @@ void init() {
 void loop() {
 	while (1) {
 		// Logic
+		movement();
 
 		// Repaint
 		paint();
 	}
 }
 
+void movement() {
+	SDL_PollEvent(&e);
+	keystate = (Uint8 *) SDL_GetKeyboardState(NULL);
+	SDL_Rect *playerPos = player -> getPos();
+	if (keystate[SDL_SCANCODE_UP]) {
+		playerPos -> y -= 5;
+	}
+	if (keystate[SDL_SCANCODE_DOWN]) {
+		playerPos -> y += 5;
+	}
+	if (keystate[SDL_SCANCODE_LEFT]) {
+		playerPos -> x -= 5;
+	}
+	if (keystate[SDL_SCANCODE_RIGHT]) {
+		playerPos -> x += 5;
+	}
+	player -> setPos(*playerPos);
+	if (keystate[SDL_SCANCODE_ESCAPE]) {
+		SDL_Quit();
+		exit(0);
+	}
+}
+
 void paint() {
 	// Repaint everything
-	SDL_FillRect(surface, NULL, SDL_MapRGB(surface -> format, 0xFF, 0x00, 0xF0));
+	SDL_FillRect(initial -> getSurface(), NULL, SDL_MapRGB((initial -> getSurface()) -> format, 0xFF, 0x00, 0xF0));
+
+	// Paint second entry through last in list based on layer
+	Entity *tmp = initial -> getNext();
+	while (tmp != NULL) {
+		//SDL_Rect *box = &(tmp -> box);
+		//SDL_Rect *pos = &(tmp -> pos);
+		SDL_BlitSurface(tmp -> getSurface(), tmp -> getBox(), initial -> getSurface(), tmp -> getPos());
+		tmp = tmp -> getNext();
+	}
+
 	// Update window
 	SDL_UpdateWindowSurface(window);	
+}
+
+void addEntity(Entity *entity) {
+	closing -> setNext(entity);
+	closing = entity;
+}
+
+void removeEntity(Entity *entity) {
+	Entity *tmp = initial;
+	while (tmp -> getNext() != entity) {
+		tmp = tmp -> getNext();
+	}
+	tmp -> setNext(entity -> getNext());
+
+	if (closing == entity) {
+		closing = tmp;
+	}
 }

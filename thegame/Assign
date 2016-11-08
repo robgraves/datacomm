@@ -2,7 +2,7 @@
 
 Contents=$(cat /home/mzarnoch/src/daco/WhoWorks.text)
 
-Help=$(echo "                                 ~Help Menu:                                    ~____________________________________________________________________________~|./Assign [Category]     | To add yourself to add yourself to that category |~|./Assign Add [Category] | To add that Category to the list                 |~|./Assign who            | To view who is working on the project            |~|./Assign help           | To view this menu                                |~|./Assign                | To view who is working on the project            |~ \=========================================================================/" | tr '~' '\n')
+Help=$(echo "                                 ~Help Menu:                                    ~______________________________________________________________________________~|./Assign [Category]       | To add yourself to add yourself to that category |~|./Assign add [Category]   | To add that Category to the list                 |~|./Assign remove [Category]| To remove a project all together		      |~|./Assign who              | To view who is working on the project            |~|./Assign remove	   | To remove youself from all projects	      |~|./Assign help             | To view this menu                                |~|./Assign                  | To view who is working on the project            |~ \===========================================================================/" | tr '~' '\n')
 
 if [ $# -lt 1 ]
 then
@@ -19,17 +19,22 @@ then
 		echo "$Help"
 		echo "Commit projects to this repository;"
 		echo "www/hg/project/thegame-fall2016"
-	else
+	elif [ "$1" == "remove" ]
+	then
+		Remove=$(echo "$Contents" | grep $USER) # Grabs all instinces of the user
+		Contents=$(echo "$Contents" | grep -v $USER)
+		Line=$(echo "$Remove"|  wc -l)
+		while [ "$Line" -gt 0 ]
+		do
+			Addon=$(echo "$Remove" | head -$Line | tail -1 | tr ',' '\n' | grep -v "$USER" | tr '\n' ',' | sed 's/,,/,/')
+			Contents=$(echo "$Contents~$Addon"| tr '~' '\n')
+			Line=$(echo "$Line -1" | bc)
+		done
+		echo "$Contents" > /home/mzarnoch/src/daco/WhoWorks.text
+	else # For adding self to category
 		search=$(echo "$Contents" | grep -c "$1")
 		if [ $search -eq 1 ]
 		then
-			search=$(echo "$Contents" | grep -c ",$USER")
-			if [ $search -gt 0 ] # Person is in another class, so I must remove them from it
-			then
-				Addon=$(echo "$Contents" | grep "$USER"  | tr ',' '\n' | grep -v "$USER" | tr '\n' ',') # Finds the user and make an adjested copy of the class person was in
-				Contents=$(echo "$Contents" | grep -v $USER) # Removes person from original copy
-				Contents=$(echo "$Contents~$Addon" | tr '~' '\n' | tr -d ',,')
-			fi
 			Addon=$(echo "$Contents" | grep "$1")
 			Addon=$(echo "$Addon,$USER")
 			Contents=$(echo "$Contents" | grep -v "$1")
@@ -46,6 +51,17 @@ then
 	then
 		echo "-$2:" >> /home/mzarnoch/src/daco/WhoWorks.text
 		echo "$2 added to project page!"
+	elif [ $1 == "remove" ] # Have to see if the person is specifying the remove command
+	then
+		Line=$(echo "$Contents" | grep -c $2)
+		if [ $Line -eq 1 ]
+		then
+			Contents=$(echo "$Contents" | grep -v $2)
+			echo "$Contents" > /home/mzarnoch/src/daco/WhoWorks.text # Update the file
+		else
+			echo "Error: Project name not readable. Try help"
+		fi
+
 	else
 		echo "Error: '$1' not recognized as a command. Try help"
 	fi
