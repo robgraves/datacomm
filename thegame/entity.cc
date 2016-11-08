@@ -92,3 +92,13 @@ void Entity :: setLayer(int layer) {
 	this -> layer = layer;
 }
 
+void Entity :: loadSprite(char *sprite, int width)
+{
+    this -> surface = IMG_Load(sprite);
+    setBox(0,0,width,surface -> h);
+}
+
+void Entity :: changeSprite(int num)
+{
+    setBox(((this -> box.w) * num), 0, this -> box.w, this -> box.h);
+}

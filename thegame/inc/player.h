@@ -21,12 +21,10 @@
 #define TRIPPLE  0x0400 // Typical shotgun effect
 #define MEGA     0x0800 // Multiple shots side by side in a single direction
 
-class Player : public Entity {
+ Player : public Entity {
 	public:
 		void HelloWorld();
 	private:
         short int weapon;
 		
 };
-
-#endif

@@ -2,7 +2,7 @@
 
 Contents=$(cat /home/mzarnoch/src/daco/WhoWorks.text)
 
-Help=$(echo "                                 ~Help Menu:                                    ~______________________________________________________________________________~|./Assign [Category]       | To add yourself to add yourself to that category |~|./Assign add [Category]   | To add that Category to the list                 |~|./Assign remove [Category]| To remove a project all together		      |~|./Assign who              | To view who is working on the project            |~|./Assign remove	   | To remove youself from all projects	      |~|./Assign help             | To view this menu                                |~|./Assign                  | To view who is working on the project            |~ \===========================================================================/" | tr '~' '\n')
+Help=$(echo "                                 ~Help Menu:                                    ~______________________________________________________________________________~|./Assign [Category]       | To add yourself to add yourself to that category |~|./Assign add [Category]   | To add that Category to the list                 |~|./Assign remove [Category]| To remove a project all together		      |~|./Assign who              | To view who is working on the project            |~|./Assign jobs             | To view what each Category works on              |~|./Assign remove	   | To remove youself from all projects	      |~|./Assign help             | To view this menu                                |~|./Assign                  | To view who is working on the project            |~ \===========================================================================/" | tr '~' '\n')
 
 if [ $# -lt 1 ]
 then
@@ -31,6 +31,9 @@ then
 			Line=$(echo "$Line -1" | bc)
 		done
 		echo "$Contents" > /home/mzarnoch/src/daco/WhoWorks.text
+	elif [ "$1" == "jobs" ]
+	then
+		cat /home/mzarnoch/src/daco/desc.txt
 	else # For adding self to category
 		search=$(echo "$Contents" | grep -c "$1")
 		if [ $search -eq 1 ]

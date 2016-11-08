@@ -3,8 +3,7 @@
 
 #include "render.h"
 
-class Missile : public Object 
-{
+class Missile : public Entity {
 	public:
 /////////////// Setting up missile dimentions (If universal missile sprite is used) //////////////////
 		/* This stuff goes in the constructor
@@ -13,12 +12,15 @@ class Missile : public Object
 		missilebox.w = 16;
 		missilebox.h = 16;
 		*/
-		void Spawn(Missile **, SDL_Rect, SDL_Rect, int, int, int);
+		Entity			*Mstart;
+		void Spawn(Entity **, int, int);
 		Missile();
-	
+
 	private:
+		int			Health;
+		Entity			*Mend;
 		int			direction;
-		int			speed;
+		int			Speed;
 };
 
 #endif
